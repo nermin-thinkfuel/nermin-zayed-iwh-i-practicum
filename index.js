@@ -38,4 +38,23 @@ app.get('/update-cobj', (req, res) => {
 
 // FORM SUBMIT — POST /update-cobj
 app.post('/update-cobj', async (req, res) => {
-    const url = `https://api.hubapi.com/crm/v3/o
+    const url = `https://api.hubapi.com/crm/v3/objects/${CUSTOM_OBJECT_TYPE}`;
+    const newGame = {
+        properties: {
+            name: req.body.name,
+            genre: req.body.genre,
+            publisher: req.body.publisher,
+            link: req.body.link
+        }
+    };
+    try {
+        await axios.post(url, newGame, { headers });
+        res.redirect('/');
+    } catch (error) {
+        console.error(error.response?.data || error.message);
+        res.status(500).send('Error creating game in HubSpot');
+    }
+});
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+
